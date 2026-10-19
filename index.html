@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Lista de Tareas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2ff;
+      padding: 40px 15px;
+    }
+    main {
+      max-width: 500px;
+      margin: auto;
+      padding: 25px;
+      background: white;
+      border-radius: 15px;
+    }
+    h1 { color: #4338ca; }
+    input, button {
+      padding: 10px;
+      margin: 4px;
+    }
+    button {
+      background: #4338ca;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    li { margin: 12px 0; }
+    .hecha { text-decoration: line-through; color: gray; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Mi Lista de Tareas</h1>
+    <p>Organiza tus actividades del día.</p>
+
+    <form id="formulario">
+      <input id="tarea" placeholder="Escribe una tarea" required>
+      <button>Agregar</button>
+    </form>
+
+    <ul id="lista"></ul>
+    <p id="contador">Tareas pendientes: 0</p>
+  </main>
+
+  <script>
+    const formulario = document.getElementById("formulario");
+    const entrada = document.getElementById("tarea");
+    const lista = document.getElementById("lista");
+    const contador = document.getElementById("contador");
+
+    formulario.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const texto = entrada.value.trim();
+      if (!texto) return;
+
+      const li = document.createElement("li");
+      const nombre = document.createElement("span");
+      nombre.textContent = texto;
+
+      const completar = document.createElement("button");
+      completar.textContent = "Completar";
+      completar.onclick = function() {
+        nombre.classList.toggle("hecha");
+        actualizar();
+      };
+
+      const eliminar = document.createElement("button");
+      eliminar.textContent = "Eliminar";
+      eliminar.onclick = function() {
+        li.remove();
+        actualizar();
+      };
+
+      li.append(nombre, completar, eliminar);
+      lista.appendChild(li);
+      entrada.value = "";
+      actualizar();
+    });
+
+    function actualizar() {
+      const tareas = [...lista.children];
+      const pendientes = tareas.filter(
+        li => !li.querySelector("span").classList.contains("hecha")
+      ).length;
+      contador.textContent = "Tareas pendientes: " + pendientes;
+    }
+  </script>
+</body>
+</html>
